@@ -60,6 +60,9 @@ async def analyze(req: SurveillanceRequest):
             if clean.startswith("json"):
                 clean = clean[4:]
         report = json.loads(clean)
+        # Proactively save the intelligence report for the distribution endpoint
+        with open(r"d:\Users\Desktop\codeforcom\dataset\latest_surveillance.json", "w") as f:
+            json.dump(report, f, indent=2)
     except Exception:
         report = {"raw_output": raw, "parse_error": "Agent did not return valid JSON"}
 
@@ -115,6 +118,9 @@ async def analyze_stream(req: SurveillanceRequest):
                 if clean.startswith("json"):
                     clean = clean[4:]
             report = json.loads(clean)
+            # Proactively save the intelligence report for the distribution endpoint
+            with open(r"d:\Users\Desktop\codeforcom\dataset\latest_surveillance.json", "w") as f:
+                json.dump(report, f, indent=2)
         except Exception:
             report = {"raw_output": raw}
 

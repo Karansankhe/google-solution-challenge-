@@ -1,0 +1,109 @@
+{
+  "location": {
+    "city": "Mumbai",
+    "country": "India",
+    "lat": 18.9733536,
+    "lon": 72.82810491917377
+  },
+  "generated_at": "2026-08-23T00:27:50Z",
+  "executive_summary": [
+    "Monsoon-driven seasonal disease surge (Malaria, Dengue, Leptospirosis) is currently high; Malaria cases reported 111% above baseline.",
+    "Critical healthcare demand surge anticipated mid-September due to Ganesh Chaturthi festival, requiring trauma and triage pre-planning.",
+    "Current air quality is healthy (GREEN protocol) due to monsoon precipitation, with no immediate respiratory threats."
+  ],
+  "overall_risk_level": "HIGH",
+  "signal_assessment": {
+    "weather": {
+      "temperature": 27.5,
+      "humidity": 83.0,
+      "description": "High humidity with intermittent monsoon rainfall"
+    },
+    "aqi": {
+      "index": 1,
+      "label": "Good",
+      "pm2_5": 5.53,
+      "pm10": 12.85
+    },
+    "outbreak_alerts": [
+      {
+        "signal": "111% Increase in Malaria",
+        "source": "BMC/Mid-Day",
+        "severity": "HIGH",
+        "date": "2026-08-22"
+      },
+      {
+        "signal": "Elevated Dengue/Leptospirosis",
+        "source": "BMC",
+        "severity": "HIGH",
+        "date": "2026-08-22"
+      }
+    ],
+    "emr_signals": [
+      "Sustained surge in fever-related clinical presentations across PHCs"
+    ]
+  },
+  "festival_surge_forecast": {
+    "upcoming_events": [
+      {
+        "name": "Ganesh Chaturthi",
+        "dates": "2026-09-14 to 2026-09-25",
+        "attendance": "Millions",
+        "peak_risk_window": "2026-09-22 to 2026-09-26",
+        "services_impacted": [
+          "Trauma/ED",
+          "Gastrointestinal",
+          "Ambulance/Triage"
+        ],
+        "risk_rating": "HIGH"
+      }
+    ],
+    "resource_recommendations": [
+      "Deploy Mobile Medical Units and triage tents on major procession routes (Lalbaug, Girgaon).",
+      "Pre-position bike-ambulances at high-risk gridlock points.",
+      "Increase buffer stock of IV fluids, ORS, and gastro-meds by 40%."
+    ]
+  },
+  "pollution_risk": {
+    "risk_matrix": [
+      {
+        "pollutant": "PM2.5",
+        "value": 5.53,
+        "unit": "\u00b5g/m\u00b3",
+        "risk": "Low",
+        "protocol": "Baseline"
+      }
+    ],
+    "protocol_triggered": "GREEN",
+    "lag_forecast": "Stable; low risk unless abrupt transition to dry, stagnant conditions occurs.",
+    "interventions": [
+      "Routine surveillance of respiratory outpatient volume."
+    ]
+  },
+  "compound_risks": [
+    {
+      "scenario": "Vector-borne Surge overlapping Festival peak",
+      "risk_level": "CRITICAL",
+      "rationale": "High hospital bed occupancy from fever cases will be compounded by festival trauma surge, risking systemic triage failure."
+    }
+  ],
+  "recommended_actions": {
+    "24h": [
+      "Maintain high clinical suspicion for Malaria/Dengue for fever presentations.",
+      "Reinforce water stagnation awareness to public."
+    ],
+    "7_day": [
+      "Initiate mobilization of festival triage medical teams.",
+      "Assess current stock levels of antimalarials and IV fluids."
+    ],
+    "30_day": [
+      "Execute festival surge management protocols (Sept 14).",
+      "Conduct post-immersion surge surveillance (Gastro/Trauma) starting Sept 26."
+    ]
+  },
+  "data_sources": [
+    "Brihanmumbai Municipal Corporation (BMC)",
+    "PharmEasy Fever Watch",
+    "Mid-Day Local Health Reports",
+    "Local Environmental Monitoring"
+  ]
+}
