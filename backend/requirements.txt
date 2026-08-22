@@ -1,0 +1,6 @@
+fastapi[all]
+google-genai
+pydantic
+pydantic-settings
+python-dotenv
+uvicorn
