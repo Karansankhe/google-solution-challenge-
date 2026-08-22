@@ -1,5 +1,6 @@
 import json
 import os
+import tempfile
 import asyncio
 from datetime import datetime
 from fastapi import APIRouter, HTTPException
@@ -15,7 +16,7 @@ async def create_distribution_plan(req: DistributionPlanRequest):
     Generate a proactive distribution and resource redistribution plan based on 
     the latest surveillance intelligence and the provided PHC datasets.
     """
-    surveillance_file = r"d:\Users\Desktop\codeforcom\dataset\latest_surveillance.json"
+    surveillance_file = os.path.join(tempfile.gettempdir(), "latest_surveillance.json")
     
     if not os.path.exists(surveillance_file):
         raise HTTPException(
