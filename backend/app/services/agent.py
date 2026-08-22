@@ -21,9 +21,9 @@ async def generate_agent_response(request: ChatRequest) -> str:
         
     prompt = "\n".join(contents)
     
-    # We use gemini-2.5-flash as the default model
+    # We use gemini-3.1-flash-lite as the default model
     response = client.models.generate_content(
-        model='gemini-2.5-flash',
+        model='gemini-3.1-flash-lite',
         contents=prompt,
     )
     
