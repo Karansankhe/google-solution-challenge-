@@ -7,3 +7,4 @@ uvicorn
 agno
 requests
 duckduckgo-search
+ddgs
