@@ -99,7 +99,7 @@ def fetch_health_news(location: str) -> str:
     except Exception as e:
         return json.dumps({"error": str(e)})
 
-def build_team(location: str, geo: dict, time_horizon: str = "long") -> Team:
+def build_team(location: str, geo: dict, time_horizon: str = "long", memory_context: str = "") -> Team:
     lat, lon, city = geo["lat"], geo["lon"], geo["city"]
     country = geo.get("country", "")
     
@@ -140,24 +140,36 @@ def build_team(location: str, geo: dict, time_horizon: str = "long") -> Team:
         add_datetime_to_context=True,
     )
 
+    festival_instructions = [
+        f"Target location: {city}, {country}",
+        "",
+    ]
+    
+    if memory_context:
+        festival_instructions.extend([
+            "HISTORICAL MEMORY CONTEXT (Use this to compare against current signals):",
+            f"{memory_context}",
+            ""
+        ])
+
+    festival_instructions.extend([
+        "Your tasks:",
+        f"1. Search Tavily/DuckDuckGo for ALL major festivals, religious events, sports events, "
+        f"   and mass gatherings in or near {city} in the {horizon_desc}.",
+        "2. For each event: name, date range, expected attendance, venue.",
+        "3. Model surge windows: T-3 days (prep surge), T+0 (peak), T+7 days (post-event illness wave).",
+        "4. Identify which services face highest demand: ED, respiratory, trauma, gastro, mental health.",
+        "5. Search for historical illness precedents linked to similar past events in this region. Compare with the HISTORICAL MEMORY CONTEXT if provided.",
+        "6. Output a surge-prediction calendar table: Event | Dates | Attendance | Peak Risk Window | Services Impacted | Risk Rating.",
+        "7. Recommend top-3 resource pre-positioning actions.",
+    ])
+
     festival_agent = Agent(
         name="Festival Surge Anticipator",
         role="Forecast healthcare demand surges from upcoming festivals and mass gatherings near the target location.",
         model=gemini,
         tools=[TavilyTools(api_key=settings.TAVILY_API_KEY), DuckDuckGoTools()],
-        instructions=[
-            f"Target location: {city}, {country}",
-            "",
-            "Your tasks:",
-            f"1. Search Tavily/DuckDuckGo for ALL major festivals, religious events, sports events, "
-            f"   and mass gatherings in or near {city} in the {horizon_desc}.",
-            "2. For each event: name, date range, expected attendance, venue.",
-            "3. Model surge windows: T-3 days (prep surge), T+0 (peak), T+7 days (post-event illness wave).",
-            "4. Identify which services face highest demand: ED, respiratory, trauma, gastro, mental health.",
-            "5. Search for historical illness precedents linked to similar past events in this region.",
-            "6. Output a surge-prediction calendar table: Event | Dates | Attendance | Peak Risk Window | Services Impacted | Risk Rating.",
-            "7. Recommend top-3 resource pre-positioning actions.",
-        ],
+        instructions=festival_instructions,
         add_datetime_to_context=True,
     )
 

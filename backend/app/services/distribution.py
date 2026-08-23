@@ -29,11 +29,15 @@ def load_dataset_context() -> str:
     
     return context
 
-def build_distribution_team(location: str, surveillance_report: dict, time_horizon: str = "long") -> Team:
+def build_distribution_team(location: str, surveillance_report, time_horizon: str = "long") -> Team:
     gemini = Gemini(id="gemini-3.1-flash-lite", api_key=settings.GEMINI_API_KEY)
 
     dataset_context = load_dataset_context()
-    surveillance_summary = json.dumps(surveillance_report, indent=2)
+    
+    if isinstance(surveillance_report, dict):
+        surveillance_summary = json.dumps(surveillance_report, indent=2)
+    else:
+        surveillance_summary = str(surveillance_report)
 
     forecasting_agent = Agent(
         name="Resource Forecasting Agent",

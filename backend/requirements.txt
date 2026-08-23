@@ -9,3 +9,4 @@ requests
 duckduckgo-search
 ddgs
 tavily-python
+cognee

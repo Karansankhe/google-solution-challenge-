@@ -8,6 +8,7 @@ from fastapi.responses import StreamingResponse
 
 from app.models.surveillance import SurveillanceRequest, GeoResponse
 from app.services.surveillance import geocode_location, build_team, fetch_weather_aqi, fetch_health_news
+from app.services.memory import save_surveillance_report, retrieve_historical_context
 
 router = APIRouter(tags=["Surveillance"])
 
@@ -148,4 +149,58 @@ def snapshot(location: str):
         "weather_aqi":     json.loads(data),
         "health_news":     json.loads(news),
         "snapshot_time":   datetime.utcnow().isoformat() + "Z",
+    }
+
+@router.post("/analyze_memory")
+async def analyze_memory(req: SurveillanceRequest):
+    """
+    Run the full 3-agent health surveillance cycle with Cognee historical memory injection.
+    Saves the final report back into the Cognee graph.
+    """
+    try:
+        geo = geocode_location(req.location)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+    # Retrieve historical context from Cognee
+    memory_context = await retrieve_historical_context(req.location)
+
+    team = build_team(req.location, geo, req.time_horizon.value, memory_context=memory_context)
+    loop = asyncio.get_event_loop()
+
+    def run_team():
+        response = team.run(
+            f"Execute the full health intelligence cycle for: {geo['city']}, {geo['country']}\n"
+            f"Coordinates: lat={geo['lat']}, lon={geo['lon']}\n"
+            f"Today: {datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')}\n"
+            f"Time Horizon for Planning: {req.time_horizon.value}\n\n"
+            "Each agent must gather their domain signals, then the supervisor synthesises everything into the structured JSON report.",
+            stream=False,
+        )
+        return response.content if hasattr(response, "content") else str(response)
+
+    raw = await loop.run_in_executor(None, run_team)
+
+    try:
+        clean = raw.strip()
+        if clean.startswith("```"):
+            clean = clean.split("```")[1]
+            if clean.startswith("json"):
+                clean = clean[4:]
+        report = json.loads(clean)
+        
+        # Save to memory instead of /tmp
+        await save_surveillance_report(req.location, report)
+    except Exception:
+        report = {"raw_output": raw, "parse_error": "Agent did not return valid JSON or memory save failed."}
+
+    return {
+        "location": geo,
+        "report":   report,
+        "meta": {
+            "requested_at": datetime.utcnow().isoformat() + "Z",
+            "agents_used":  ["Signal Collector", "Festival Surge Anticipator", "Pollution Risk Agent"],
+            "model":        "gemini-3.1-flash-lite",
+            "memory_used":  True
+        },
     }
