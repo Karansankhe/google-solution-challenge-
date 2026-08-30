@@ -1,4 +1,4 @@
-# Swasthya Mitra Backend
+# Swasthya Mitra Backend.
 
 This repository contains the backend service for **Swasthya Mitra**, a secure agentic intelligence platform built with **FastAPI** and the **Gemini API**. It provides an advanced suite of tools for health surveillance, supply chain distribution planning, and interactive chat.
 
